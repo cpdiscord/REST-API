@@ -1,0 +1,144 @@
+#%RAML 1.0
+title: Scoring API
+version: v1
+baseUri: http://8bit.systems/api
+protocols:
+  - HTTP
+types:
+    ImageData:
+      Key: integer
+      uid: string
+      json: string
+    fileData:
+      Name: string
+      MadeBy: string
+      FilePath: string
+      fileData: file
+
+/Images:
+  /All:
+    get:
+      headers:
+        X-Api-Key:
+          type: string
+
+      queryParameters:
+        Filter:
+          type: string
+          required: false
+        Field:
+          type: string
+          required: false
+        Start:
+          type: string
+          required: false
+        Limit:
+            type: number
+            required: false
+      responses:
+        200:
+          headers:
+            X-Api-Key: string
+          body:
+            application/json:
+              example: |
+                {
+                    "status": true,
+                    "message": "message output for errors",
+                    "data": {
+                        "Images": [{
+                            "uid": "UID of image",
+                            "json": "{string of json}",
+                            "Key": 0
+                            }
+                        ]
+                    },
+                    "total": 1
+                }
+  /details:
+      get:
+        queryParameters:
+          Key: string
+        headers:
+          X-Api-Key:
+            type: string
+        body:
+          application/json:
+            type:
+        responses:
+          200:
+            body:
+              application/json:
+                type: ImageData
+  /add:
+    post:
+      body:
+        application/json:
+          type: string
+      queryParameters:
+        uid:
+          type: string
+          required: true
+        json:
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            application/json:
+              type: string
+
+        500:
+          body:
+            application/json:
+              type: string
+              example: |
+                {
+                  "status": "false",
+                  "message": "error text"
+                }
+    /update:
+      post:
+        body:
+          application/json:
+            type: string
+        queryParameters:
+          Key:
+            type: number
+            required: true
+          uid:
+            type: string
+            required: true
+          json:
+            type: string
+            required: true
+        responses:
+          200:
+            body:
+              application/json:
+                type: string
+                example: |
+                  {
+                    "status": true,
+                    "message": "Your data has been successfully updated into the database"
+                  }
+          406:
+            description: Error when data is not changed
+            body:
+              application/json:
+                type: string
+                example: |
+                  {
+                    "status": "false",
+                    "message": "The data has not changed."
+                  }
+          500:
+              description: Internal error, check error output JSON in "message"
+              body:
+                application/json:
+                  type: string
+                  example: |
+                    {
+                      "status": "false",
+                      "message": "error text"
+                    }
