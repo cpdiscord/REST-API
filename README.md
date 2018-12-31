@@ -17,6 +17,9 @@ Include in issue the following:
 - What you need they key for
 - Your discord Username
 
+# User Login
+To get a user login Create an issue with your email and we will get right to you!
+
 # API Token
 
 To be issued an API token please open a Issue named "API Token Request - {Your username}"
