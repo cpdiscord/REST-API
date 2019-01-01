@@ -14,6 +14,9 @@ types:
       MadeBy: string
       FilePath: string
       fileData: file
+    Api-Key: string
+    Api-Token: string
+
 
 /Images:
   /All:
@@ -97,48 +100,86 @@ types:
                   "status": "false",
                   "message": "error text"
                 }
-    /update:
-      post:
-        body:
-          application/json:
-            type: string
-        queryParameters:
-          Key:
-            type: number
-            required: true
-          uid:
-            type: string
-            required: true
-          json:
-            type: string
-            required: true
-        responses:
-          200:
-            body:
-              application/json:
-                type: string
-                example: |
-                  {
-                    "status": true,
-                    "message": "Your data has been successfully updated into the database"
-                  }
-          406:
-            description: Error when data is not changed
+  /update:
+    post:
+      body:
+        application/json:
+          type: string
+      queryParameters:
+        Key:
+          type: number
+          required: true
+        uid:
+          type: string
+          required: true
+        json:
+          type: string
+          required: true
+      responses:
+        200:
+          body:
+            application/json:
+              type: string
+              example: |
+                {
+                  "status": true,
+                  "message": "Your data has been successfully updated into the database"
+                }
+        406:
+          description: Error when data is not changed
+          body:
+            application/json:
+              type: string
+              example: |
+                {
+                  "status": "false",
+                  "message": "The data has not changed."
+                }
+        500:
+            description: Internal error, check error output JSON in "message"
             body:
               application/json:
                 type: string
                 example: |
                   {
                     "status": "false",
-                    "message": "The data has not changed."
+                    "message": "error text"
                   }
-          500:
-              description: Internal error, check error output JSON in "message"
-              body:
-                application/json:
-                  type: string
-                  example: |
-                    {
-                      "status": "false",
-                      "message": "error text"
-                    }
+  /delete:
+    post:
+      queryParameters:
+        id: integer
+      headers: 
+        X-Api-Key: Api-Key
+      responses:
+        200:
+          body:
+            application/json:
+              type: string
+              example: |
+                {
+                  "status": "true",
+                  "message": "Sucessfully deleted"
+                }
+        406:
+          description: Error when data is not changed
+          body:
+            application/json:
+              type: string
+              example: |
+                {
+                  "status": "false",
+                  "message": "The data has not changed."
+                }
+        500:
+            description: Internal error, check error output JSON in "message"
+            body:
+              application/json:
+                type: string
+                example: |
+                  {
+                    "status": "false",
+                    "message": "error text"
+                  }
+        403:
+          description: Not acceptable -- ValidationError
